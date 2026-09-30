@@ -1,0 +1,130 @@
+/* VAPOR — 7 alternate themes. Each overrides CSS variables on body[data-theme].
+   BERT Dark is the default in :root (base.css). Estate rule: ship all themes. */
+
+/* Bento Grid — warm dark, amber accents */
+body[data-theme="bento-grid"] {
+  --bg: #1a1410;
+  --bg-soft: #241c16;
+  --panel: #2a2018;
+  --panel-soft: #241c16;
+  --text: #f4e8d8;
+  --text-dim: #a89580;
+  --accent: #ffaa3b;
+  --accent-2: #d6772a;
+  --warn: #ff5252;
+  --warn-soft: #c2003f;
+  --good: #7ad27a;
+  --border: rgba(255, 170, 59, 0.22);
+  --border-soft: rgba(255, 255, 255, 0.06);
+}
+
+/* Cosmic Cyber — deep purple, magenta/cyan */
+body[data-theme="cosmic-cyber"] {
+  --bg: #0a0418;
+  --bg-soft: #14082a;
+  --panel: #1a0e36;
+  --panel-soft: #14082a;
+  --text: #e8d9ff;
+  --text-dim: #9a86c4;
+  --accent: #ff2d98;
+  --accent-2: #00e0ff;
+  --warn: #ff5252;
+  --warn-soft: #c2003f;
+  --good: #2fd57a;
+  --border: rgba(255, 45, 152, 0.25);
+  --border-soft: rgba(255, 255, 255, 0.06);
+}
+
+/* Swiss Architect — light, minimal, red/black */
+body[data-theme="swiss-architect"] {
+  --bg: #f4f1ea;
+  --bg-soft: #e8e3d8;
+  --panel: #ffffff;
+  --panel-soft: #f4f1ea;
+  --text: #1a1a1a;
+  --text-dim: #6a6a6a;
+  --accent: #d72a2a;
+  --accent-2: #1a1a1a;
+  --warn: #d72a2a;
+  --warn-soft: #a02020;
+  --good: #2a8a2a;
+  --border: rgba(26, 26, 26, 0.18);
+  --border-soft: rgba(0, 0, 0, 0.08);
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Aqua Web 2.0 — glossy light blue, glassy */
+body[data-theme="aqua-web20"] {
+  --bg: #dceefb;
+  --bg-soft: #c8e2f5;
+  --panel: #ffffff;
+  --panel-soft: #eaf4fb;
+  --text: #1a3a52;
+  --text-dim: #5a7a92;
+  --accent: #0099e6;
+  --accent-2: #0066b3;
+  --warn: #e64545;
+  --warn-soft: #b32030;
+  --good: #2aa652;
+  --border: rgba(0, 153, 230, 0.25);
+  --border-soft: rgba(0, 0, 0, 0.08);
+  --shadow: 0 4px 20px rgba(0, 153, 230, 0.12);
+}
+
+/* Pop Brutalist — high contrast, yellow/black */
+body[data-theme="pop-brutalist"] {
+  --bg: #fffbe6;
+  --bg-soft: #fff5cc;
+  --panel: #ffffff;
+  --panel-soft: #fffbe6;
+  --text: #0a0a0a;
+  --text-dim: #5a5a5a;
+  --accent: #ffcc00;
+  --accent-2: #0a0a0a;
+  --warn: #ff3333;
+  --warn-soft: #c20000;
+  --good: #00aa44;
+  --border: #0a0a0a;
+  --border-soft: rgba(0, 0, 0, 0.15);
+  --shadow: 6px 6px 0 #0a0a0a;
+  --radius: 4px;
+}
+body[data-theme="pop-brutalist"] .btn { border: 2px solid #0a0a0a; border-radius: 0; font-weight: 800; }
+body[data-theme="pop-brutalist"] .btn--primary { box-shadow: 4px 4px 0 #0a0a0a; }
+body[data-theme="pop-brutalist"] .btn--primary:hover { box-shadow: 2px 2px 0 #0a0a0a; transform: translate(2px, 2px); }
+
+/* Steel Tactical — military green/gray */
+body[data-theme="steel-tactical"] {
+  --bg: #1a1f1a;
+  --bg-soft: #232a23;
+  --panel: #2a322a;
+  --panel-soft: #232a23;
+  --text: #d4dcc8;
+  --text-dim: #8a9684;
+  --accent: #a8c84a;
+  --accent-2: #6a8a3a;
+  --warn: #ff6b3a;
+  --warn-soft: #c25020;
+  --good: #6abc6a;
+  --border: rgba(168, 200, 74, 0.25);
+  --border-soft: rgba(255, 255, 255, 0.06);
+}
+
+/* Parchment — warm cream, sepia */
+body[data-theme="parchment"] {
+  --bg: #f0e6d2;
+  --bg-soft: #e4d8be;
+  --panel: #faf2e0;
+  --panel-soft: #f0e6d2;
+  --text: #3a2e1e;
+  --text-dim: #7a6a4e;
+  --accent: #8b5a2b;
+  --accent-2: #6a4a1e;
+  --warn: #b03020;
+  --warn-soft: #802015;
+  --good: #4a7a3a;
+  --border: rgba(139, 90, 43, 0.3);
+  --border-soft: rgba(0, 0, 0, 0.1);
+  --shadow: 0 4px 16px rgba(139, 90, 43, 0.12);
+  --radius: 8px;
+}

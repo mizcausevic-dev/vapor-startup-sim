@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0B0C10" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content="VAPOR: Ship Nothing, Scale Everything. A satirical browser management game about competing software startups. Original work." />
+    <meta name="robots" content="index, follow" />
+    <title>VAPOR — Ship Nothing, Scale Everything</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/styles/main.css" />
+  </head>
+  <body data-theme="bert-dark">
+    <div id="app" class="app" aria-live="polite">
+      <!-- Splash / menu -->
+      <section id="screen-splash" class="screen screen--splash is-active" aria-label="Main menu">
+        <div class="splash__grid" aria-hidden="true"></div>
+        <div class="splash__inner">
+          <h1 class="splash__title"><span class="splash__title-glow">VAPOR</span></h1>
+          <p class="splash__tagline">Ship nothing. Scale everything.</p>
+          <p class="splash__sub">A satirical startup simulator. You will not learn real business here.</p>
+
+          <div class="splash__actions">
+            <button id="btn-start" class="btn btn--primary magnetic" type="button">Start a startup</button>
+            <button id="btn-seed" class="btn btn--ghost" type="button">Set seed</button>
+            <button id="btn-help" class="btn btn--ghost" type="button">How to play</button>
+            <button id="btn-scores" class="btn btn--ghost" type="button">High scores</button>
+            <button id="btn-theme" class="btn btn--ghost" type="button">Theme: BERT Dark</button>
+            <button id="btn-sound" class="btn btn--ghost" type="button" aria-pressed="false">Sound: off</button>
+          </div>
+
+          <div id="seed-panel" class="panel panel--hidden" role="dialog" aria-label="Set seed">
+            <label for="seed-input" class="panel__label">Seed (number, blank = today's date)</label>
+            <input id="seed-input" class="input" type="number" inputmode="numeric" placeholder="e.g. 12345" />
+            <div class="panel__row">
+              <button id="btn-seed-confirm" class="btn btn--small btn--primary" type="button">Use seed</button>
+              <button id="btn-seed-cancel" class="btn btn--small btn--ghost" type="button">Cancel</button>
+            </div>
+          </div>
+
+          <div id="help-panel" class="panel panel--hidden" role="dialog" aria-label="How to play">
+            <h2 class="panel__title">How to play</h2>
+            <ul class="panel__list">
+              <li><b>Goal:</b> survive 2 years of sprints and reach a good ending.</li>
+              <li><b>Each sprint:</b> pick 1 of 4 feature cards, split your budget across Engineering / Marketing / Support, then resolve a random event.</li>
+              <li><b>Watch:</b> Cash, MRR, Users, Churn, Reputation, Burn rate.</li>
+              <li><b>Endings:</b> IPO, Acquired, Bootstrapped (win), Bankrupt, Scandal (lose).</li>
+              <li><b>Keyboard:</b> 1-4 pick feature, ←/→ adjust budget, Space confirm, P pause, R restart, M mute, ? help, T theme.</li>
+              <li><b>Touch:</b> tap cards, tap +/- budget, tap Confirm.</li>
+              <li><b>Determinism:</b> same seed = same event deck and rival moves.</li>
+            </ul>
+          </div>
+
+          <div id="scores-panel" class="panel panel--hidden" role="dialog" aria-label="High scores">
+            <h2 class="panel__title">Local high scores</h2>
+            <ol id="scores-list" class="scores-list" aria-live="polite"></ol>
+            <button id="btn-scores-clear" class="btn btn--small btn--ghost" type="button">Clear scores</button>
+          </div>
+
+          <p class="splash__credit">Original work. No real companies depicted. No assets borrowed. Built with TypeScript + Vite.</p>
+        </div>
+      </section>
+
+      <!-- Game -->
+      <section id="screen-game" class="screen screen--game" aria-label="Game" hidden>
+        <header class="hud" aria-label="Heads-up display">
+          <div class="hud__brand">VAPOR</div>
+          <div class="hud__metrics" id="hud-metrics"></div>
+          <div class="hud__controls">
+            <button id="btn-pause" class="btn btn--small btn--ghost" type="button" aria-label="Pause (P)">Pause</button>
+            <button id="btn-restart" class="btn btn--small btn--ghost" type="button" aria-label="Restart (R)">Restart</button>
+            <button id="btn-mute" class="btn btn--small btn--ghost" type="button" aria-pressed="false" aria-label="Toggle sound (M)">Sound</button>
+            <button id="btn-help-game" class="btn btn--small btn--ghost" type="button" aria-label="Help (?)">Help</button>
+          </div>
+        </header>
+
+        <main class="board">
+          <aside class="board__aside board__aside--left" aria-label="Rival ecosystem">
+            <h2 class="board__aside-title">Cloud District</h2>
+            <canvas id="rival-canvas" class="rival-canvas" width="320" height="320" aria-label="Animated rival startups"></canvas>
+            <div id="rival-list" class="rival-list" aria-live="polite"></div>
+          </aside>
+
+          <section class="board__main" aria-label="Sprint controls">
+            <div class="sprint-banner">
+              <div class="sprint-banner__label">Sprint</div>
+              <div class="sprint-banner__num" id="sprint-num">1</div>
+              <div class="sprint-banner__seed" id="sprint-seed"></div>
+            </div>
+
+            <div class="event-slot" id="event-slot" aria-live="polite"></div>
+
+            <div class="hand" id="hand" aria-label="Feature cards"></div>
+
+            <div class="budget" id="budget" aria-label="Budget allocation"></div>
+
+            <div class="actions">
+              <button id="btn-confirm" class="btn btn--primary magnetic" type="button" disabled>Confirm sprint (Space)</button>
+            </div>
+
+            <div class="log" id="log" aria-live="polite" aria-label="Event log"></div>
+          </section>
+
+          <aside class="board__aside board__aside--right" aria-label="Built features">
+            <h2 class="board__aside-title">Built features</h2>
+            <ul id="feature-list" class="feature-list"></ul>
+          </aside>
+        </main>
+
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      </section>
+
+      <!-- Pause overlay -->
+      <div id="screen-pause" class="overlay" hidden>
+        <div class="overlay__card">
+          <h2 class="overlay__title">Paused</h2>
+          <p class="overlay__sub">Press P or tap to resume.</p>
+          <button id="btn-resume" class="btn btn--primary" type="button">Resume</button>
+          <button id="btn-quit" class="btn btn--ghost" type="button">Quit to menu</button>
+        </div>
+      </div>
+
+      <!-- Ending overlay -->
+      <div id="screen-ending" class="overlay" hidden>
+        <div class="overlay__card overlay__card--ending">
+          <h2 id="ending-title" class="overlay__title">ENDING</h2>
+          <p id="ending-flavor" class="overlay__sub"></p>
+          <div class="ending-score">
+            <div class="ending-score__label">Final score</div>
+            <div class="ending-score__num" id="ending-score">0</div>
+          </div>
+          <ul id="ending-breakdown" class="ending-breakdown"></ul>
+          <div class="overlay__actions">
+            <button id="btn-ending-restart" class="btn btn--primary magnetic" type="button">Play again (R)</button>
+            <button id="btn-ending-menu" class="btn btn--ghost" type="button">Main menu</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

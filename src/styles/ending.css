@@ -1,0 +1,124 @@
+/* VAPOR — overlays (pause, ending), toast, reduced-motion gate. */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 12, 16, 0.85);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+  animation: overlay-in 0.2s ease-out;
+}
+.overlay[hidden] { display: none; }
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+
+.overlay__card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+  animation: card-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.overlay__card--ending { max-width: 560px; }
+.overlay__title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  margin: 0 0 8px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+}
+.overlay__sub { color: var(--text-dim); margin: 0 0 20px; font-size: 14px; line-height: 1.5; }
+
+.ending-score {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.ending-score__label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+.ending-score__num {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--accent);
+  text-shadow: 0 0 24px rgba(102, 252, 241, 0.4);
+}
+
+.ending-breakdown {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: 12px;
+}
+.ending-breakdown li {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+}
+.ending-breakdown li:last-child { border-bottom: none; }
+
+.overlay__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 200;
+  max-width: 90vw;
+}
+.toast--show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Scrollbar (themed) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--accent-2); border-radius: 99px; }
+::-webkit-scrollbar-track { background: var(--bg-soft); }
+
+/* Reduced motion gate — collapses all animations. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .splash__title-glow { animation: none; color: var(--accent); }
+  .metric--warn .metric__value { animation: none; }
+}
